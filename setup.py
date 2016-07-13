@@ -8,7 +8,7 @@ install_requires = [
 
 setup(
     name="ha-release",
-    version="0.1.0",
+    version="0.5.0",
     description="Phase new EC2 Instances into an AWS Autoscaling Group without Downtime",
     license="MIT",
     author="adamar",
@@ -16,7 +16,7 @@ setup(
     url="http://github.com/adamar/ha-release",
     packages=find_packages(),
     install_requires=install_requires,
-    scripts=['ha-release.py'],
+    scripts=['ha-release/ha-release'],
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
