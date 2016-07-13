@@ -12,6 +12,8 @@ setup(
     description="Phase in new EC2 Instances into an AWS Autoscaling Group without Downtime",
     license="MIT",
     author="adamar",
+    author_email="none@none.com",
+    url="http://github.com/adamar/ha-release",
     packages=find_packages(),
     install_requires=install_requires,
     scripts=['ha-release'],
