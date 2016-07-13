@@ -16,7 +16,7 @@ setup(
     url="http://github.com/adamar/ha-release",
     packages=find_packages(),
     install_requires=install_requires,
-    scripts=['ha-release'],
+    scripts=['ha-release.py'],
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
