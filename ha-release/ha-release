@@ -25,6 +25,11 @@ class Business(object):
         self.ec2 = boto.ec2.connect_to_region(self.region, profile_name=self.profile)
         self.elb = boto.ec2.elb.connect_to_region(self.region, profile_name=self.profile)
 
+    def _print(self, msg):
+        """
+        Print to screen
+        """
+        print "<--- {} --->".format(msg)
 
     def _list_instances_in_asg(self):
         """
@@ -79,7 +84,7 @@ class Business(object):
         from the ELB
         """
         for i in self._list_instances_in_asg():
-            print "marking instance for temination"
+            self._print("Marking instances for Termination")
             i.instances[0].add_tag(self.TAG, "true")
 
 
@@ -87,7 +92,7 @@ class Business(object):
         #print self.__list_instances_in_asg()
         for lb in self.autoscale.get_all_groups()[0].load_balancers:
             for i in self.elb.describe_instance_health(lb, self._list_instance_ids_in_asg()):
-                print i.state
+                self._print(i.state)
             
 
     def _get_remaining_instances(self):
@@ -107,19 +112,17 @@ class Business(object):
         self._mark_instances_for_termination()
         instances = self._get_remaining_instances()
 
-        print "Current capacity", self._get_current_capacity()
-        print "Desired capacity", self._get_desired_capacity()
+
+        self._print("Current capacity [ " +  string(self._get_current_capacity()) + " ]")
+        self._print("Desired capacity [ " + string(self._get_desired_capacity()) + " ]")
 
         ## Should check if ASG health_type == "elb"
         for instance in list(instances):
 
-            print "Current capacity", self._get_current_capacity()
-            print "Desired capacity", self._get_desired_capacity()
-
             while self._get_current_capacity() < self._get_desired_capacity():
                 time.sleep(10)
-                print "Waiting on capacity..."
-            print "Terminating instance"
+                self._print("Waiting on capacity...")
+            self._print("Terminating instance")
             instance.instances[0].terminate()
             instances.remove(instance)
             time.sleep(10)
