@@ -33,17 +33,24 @@ class Business(object):
 
     def _list_instances_in_asg(self):
         """
-        
+        Query AWS using the autoscaling group name and then return all
+        instances in that group.
+
+        :return: array of instances
         """
-        groups = self.autoscale.get_all_groups([self.asg])[0]
-        return self.ec2.get_all_instances([i.instance_id for i in groups.instances])
+        groups = self.autoscale.get_all_groups([self.asg])
+        if len(groups) < 1:
+            print "Error locating ASG group"
+            ## Exit here?
+            pass
+        return self.ec2.get_all_instances([i.instance_id for i in groups[0].instances])
 
 
     def _list_instance_ids_in_asg(self):
         """
         List all instancess currently in the ELB
         
-        :return: array of instances
+        :return: array of instance ids
         """
         return [i.instances[0].id for i in self._list_instances_in_asg()]
 
@@ -113,8 +120,8 @@ class Business(object):
         instances = self._get_remaining_instances()
 
 
-        self._print("Current capacity [ " +  string(self._get_current_capacity()) + " ]")
-        self._print("Desired capacity [ " + string(self._get_desired_capacity()) + " ]")
+        self._print("Current capacity [ " + str(self._get_current_capacity()) + " ]")
+        self._print("Desired capacity [ " + str(self._get_desired_capacity()) + " ]")
 
         ## Should check if ASG health_type == "elb"
         for instance in list(instances):
