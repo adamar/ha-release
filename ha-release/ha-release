@@ -90,8 +90,8 @@ class Business(object):
         Tag instances that are to be terminated and removed
         from the ELB
         """
+        self._print("Marking instances for Termination")
         for i in self._list_instances_in_asg():
-            self._print("Marking instances for Termination")
             i.instances[0].add_tag(self.TAG, "true")
 
 
@@ -120,15 +120,17 @@ class Business(object):
         instances = self._get_remaining_instances()
 
 
-        self._print("Current capacity [ " + str(self._get_current_capacity()) + " ]")
-        self._print("Desired capacity [ " + str(self._get_desired_capacity()) + " ]")
+        self._print("Current capacity [ " + str(self._get_current_capacity()) + " ]  --  Desired capacity [ " + str(self._get_desired_capacity()) + " ]")
 
         ## Should check if ASG health_type == "elb"
         for instance in list(instances):
 
+            msg = False
             while self._get_current_capacity() < self._get_desired_capacity():
+                if msg == False:
+                    self._print("Waiting on additional capacity...")
+                    msg = True
                 time.sleep(10)
-                self._print("Waiting on capacity...")
             self._print("Terminating instance")
             instance.instances[0].terminate()
             instances.remove(instance)

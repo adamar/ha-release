@@ -8,7 +8,7 @@ install_requires = [
 
 setup(
     name="ha-release",
-    version="0.6.2",
+    version="0.6.3",
     description="Phase new EC2 Instances into an AWS Autoscaling Group without Downtime",
     license="MIT",
     author="adamar",
