@@ -136,6 +136,11 @@ class Business(object):
             instances.remove(instance)
             time.sleep(10)
 
+        self._print("Waiting for Final Instances")
+        while self._get_current_capacity() < self._get_desired_capacity():
+            pass
+
+        self._print("Finished")
 
 
 def main():
