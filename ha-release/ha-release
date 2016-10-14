@@ -92,7 +92,11 @@ class Business(object):
         """
         self._print("Marking instances for Termination")
         for i in self._list_instances_in_asg():
-            i.instances[0].add_tag(self.TAG, "true")
+            try:
+                self._print("Tagging " + i.instances[0].id)
+                i.instances[0].add_tag(self.TAG, "true")
+            except:
+                self._print("Tagging failed")
 
 
     def _check_instance_health(self):
@@ -131,7 +135,7 @@ class Business(object):
                     self._print("Waiting on additional capacity...")
                     msg = True
                 time.sleep(10)
-            self._print("Terminating instance")
+            self._print("Terminating instance: " + instance.instances[0].id)
             instance.instances[0].terminate()
             instances.remove(instance)
             time.sleep(10)
