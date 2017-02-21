@@ -41,9 +41,12 @@ class Business(object):
         groups = self.autoscale.get_all_groups([self.asg])
         if len(groups) < 1:
             print "Error locating ASG group"
-            ## Exit here?
-            pass
-        return self.ec2.get_all_instances([i.instance_id for i in groups[0].instances])
+            sys.exit()
+        
+        instance_list = [i.instance_id for i in groups[0].instances]
+        if len(instance_list) < 1:
+            return []
+        return self.ec2.get_all_instances(instance_list)
 
 
     def _list_instance_ids_in_asg(self):
